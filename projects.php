@@ -1,10 +1,11 @@
 <?php
-$filter = $_GET['filter'];
-$json = $_GET['json'];
-
+$filter = (isset($_GET['filter']) ? $_GET['filter'] : null);
+$json = (isset($_GET['json']) ? $_GET['json'] : null);
 $f = fopen("config.json", "r");
 $config = json_decode(fread($f, filesize("config.json")));
 fclose($f);
+
+
 
 $projects = array();
 foreach ($config as $name => $project) {
@@ -13,7 +14,8 @@ foreach ($config as $name => $project) {
     }
 }
 
-putenv("PATH=" .$_ENV["PATH"]. ':/bin:/usr/bin:/usr/local/bin');
+$PATH = (isset($_ENV["PATH"]) ? $_ENV["PATH"] : null);
+putenv("PATH=" .$PATH. ':/bin:/usr/bin:/usr/local/bin');
 exec("HOME=/Users/hendrik sudo -u Hendrik ssh development \"ls development\" | grep \"$filter\" 2>&1", $dev_vm, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login zp development --print) \"ls -1 . | grep story\"  | grep \"$filter\" 2>&1", $zp_dev, $exitcode);
 
