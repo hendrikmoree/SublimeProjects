@@ -15,7 +15,8 @@ if ($script) {
     $command .= "sublime-project ".$project->{'project'}." ".$project->{'server'}." ".$project->{'user'}." ".$project->{'directory'};
 }
 
-putenv("PATH=" .$_ENV["PATH"]. ':/usr/bin:/usr/sbin:/usr/local/bin:/bin/:/sbin:/Users/hendrik/Development/sublime_packages/sublime-git/bin');
+$PATH = (isset($_ENV["PATH"]) ? $_ENV["PATH"] : null);
+putenv("PATH=" .$PATH. ':/usr/bin:/usr/sbin:/usr/local/bin:/bin/:/sbin:/Users/hendrik/Development/sublime_packages/sublime-git/bin');
 exec($command." 2>&1", $ouput, $exitcode);
 header("Content-Type: text/plain");
 if ($exitcode != 0) {
