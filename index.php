@@ -15,17 +15,22 @@ function openUrl(url, onready) {
     if (onready) {
         xmlhttp.onreadystatechange=function() {
             if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                onready(xmlhttp.responseText);
+                if (xmlhttp.responseText) {
+                    onready(xmlhttp.responseText);
+                }
             }
         }
     }
     xmlhttp.send();
 }
 
-function openProject(projectName, script) {
-    var url = "open.php?project=" + projectName;
+function openProject(projectName, script, path) {
+    var url = "open.php?project=" + encodeURIComponent(projectName);
     if (script) {
-        url += "&script=" + script;
+        url += "&script=" + encodeURIComponent(script);
+    }
+    if (path) {
+        url += "&path=" + encodeURIComponent(path);
     }
     openUrl(url, alert);
 }

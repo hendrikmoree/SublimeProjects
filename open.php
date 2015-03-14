@@ -1,11 +1,20 @@
 <?php
-$project = $_GET['project'];
-$script = $_GET['script'];
+$project = (isset($_GET['project']) ? $_GET['project'] : null);
+$script = (isset($_GET['script']) ? $_GET['script'] : null);
+$path = (isset($_GET['path']) ? $_GET['path'] : null);
 
-$command = "HOME=/Users/hendrik sudo -u Hendrik /Users/hendrik/Development/sublime_packages/sublime-git/bin/";
+$command = "HOME=/Users/hendrik sudo -u Hendrik ";
+if ($script != "sublime") {
+    $command .= "/Users/hendrik/Development/sublime_packages/sublime-git/bin/";
+}
 
 if ($script) {
-    $command .= "$script $project";
+    $command .= $script;
+    if ($path) {
+        $command .= " \"$path/$project\"";
+    } else {
+        $command .= " \"$project\"";
+    }
 } else {
     $f = fopen("config.json", "r");
     $config = json_decode(fread($f, filesize("config.json")));
