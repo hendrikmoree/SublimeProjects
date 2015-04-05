@@ -12,6 +12,9 @@ from sublime_plugin import WindowCommand
 from socket import socket, SHUT_WR
 from sublime import set_timeout, error_message
 from urllib.parse import urlencode
+from SublimeUtils.sublimeutils import executeCommand, projectRoot
+from os import makedirs
+from os.path import isdir, join
 
 class OpenProjectCommand(WindowCommand):
 
@@ -50,3 +53,16 @@ class OpenProjectCommand(WindowCommand):
         if body:
             error_message(body)
         sok.close()
+
+class CheckoutProjectCommand(WindowCommand):
+    def run(self):
+        self.view = self.window.active_view()
+        projects = executeCommand(self.view, ["seecr-git-clone"], remote=True).split('\n')[1:]
+        self.window.show_quick_panel(projects, lambda i: self._checkoutProject(i, projects))
+
+    def _checkoutProject(self, i, projects):
+        if i == -1:
+            return
+        depsDdir = join(projectRoot(self.view), "deps.d")
+        isdir(depsDdir) or makedirs(depsDdir)
+        executeCommand(view=self.view, args=["seecr-git-clone {}".format(projects[i])], projectCwd="deps.d")
