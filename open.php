@@ -1,4 +1,12 @@
 <?php
+## begin license ##
+#
+# All rights reserved.
+#
+# Copyright (C) 2015 Seecr (Seek You Too B.V.) http://seecr.nl
+#
+## end license ##
+
 $project = (isset($_GET['project']) ? $_GET['project'] : null);
 $script = (isset($_GET['script']) ? $_GET['script'] : null);
 $path = (isset($_GET['path']) ? $_GET['path'] : null);
@@ -21,7 +29,11 @@ if ($script) {
     fclose($f);
 
     $project = $config->{$project};
-    $command .= "sublime-project ".$project->{'project'}." ".$project->{'server'}." ".$project->{'user'}." ".$project->{'directory'};
+    $port = "";
+    if (array_key_exists('port', $project)) {
+        $port = $project->{'port'};
+    }
+    $command .= "sublime-project ".$project->{'project'}." ".$project->{'server'}." ".$project->{'user'}." ".$project->{'directory'}." ".$port;
 }
 
 $PATH = (isset($_ENV["PATH"]) ? $_ENV["PATH"] : null);
