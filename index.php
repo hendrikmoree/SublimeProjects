@@ -1,4 +1,12 @@
 <?php
+## begin license ##
+#
+# All rights reserved.
+#
+# Copyright (C) 2015 Seecr (Seek You Too B.V.) http://seecr.nl
+#
+## end license ##
+
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
 $DEVICE_TYPE="";
 if (stristr($userAgent, "Mobile")) {
@@ -41,7 +49,9 @@ function addProject() {
     var server = document.getElementById('newServer').value;
     var user = document.getElementById('newUser').value;
     var directory = document.getElementById('newDirectory').value;
-    openUrl("add.php?name=" + name + "&project=" + project + "&server=" + server + "&user=" + user + "&directory=" + directory, loadProjects);
+    var port =document.getElementById('newPort').value;
+    openUrl("add.php?name=" + name + "&project=" + project + "&server=" + server + "&user=" + user + "&directory=" + directory + "&port=" + port, loadProjects);
+    loadProjects();
 }
 
 function deleteProject(projectName) {
@@ -146,6 +156,8 @@ if ($DEVICE_TYPE == "MOBILE") {
             <dd><input type="text" id='newUser'/></dd>
             <dt>Directory</dt>
             <dd><input type="text" id='newDirectory'/></dd>
+            <dt>Port</dt>
+            <dd><input type="text" id='newPort'/></dd>
             <dt><input type="button" value="Save" onclick="addProject();" /></dt>
         </dl>
     </div>

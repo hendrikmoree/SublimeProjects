@@ -22,7 +22,7 @@ $config->{$name} = array(
         'project' => $project,
         'server' => $server,
         'user' => $user,
-        'directory' => $directory
+        'directory' => $directory,
         'port' => $port
     );
 
