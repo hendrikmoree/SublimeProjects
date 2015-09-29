@@ -1,0 +1,3 @@
+[
+    { "caption": "SublimeProject: Checkout deps.d", "command": "checkout_project" }
+]
