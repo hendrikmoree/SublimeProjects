@@ -1,4 +1,12 @@
 <?php
+## begin license ##
+#
+# All rights reserved.
+#
+# Copyright (C) 2016 Seecr (Seek You Too B.V.) http://seecr.nl
+#
+## end license ##
+
 $filter = (isset($_GET['filter']) ? $_GET['filter'] : null);
 $json = (isset($_GET['json']) ? $_GET['json'] : null);
 $f = fopen("config.json", "r");
@@ -15,13 +23,17 @@ foreach ($config as $name => $project) {
 $PATH = (isset($_ENV["PATH"]) ? $_ENV["PATH"] : null);
 putenv("PATH=" .$PATH. ':/bin:/usr/bin:/usr/local/bin');
 exec("HOME=/Users/hendrik sudo -u Hendrik ssh development \"ls development\" | grep -i \"$filter\" 2>&1", $dev_vm, $exitcode);
-exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login zp development --print) \"ls -1 . | grep story\"  | grep -i \"$filter\" 2>&1", $zp_dev, $exitcode);
+exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login zp development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $zp_dev, $exitcode);
+exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login drenthe development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $drenthe_dev, $exitcode);
+exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login edurep development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $edurep_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik ls \"/Users/hendrik/Library/Application Support/Sublime Text 3/Packages\" | grep -i \"$filter\" 2>&1", $sublime_packages, $exitcode);
 
 $projectsDict = array(
         'Dev servers' => array('projects' => $projects, 'script' => ""),
-        'Development VM' => array('projects' => $dev_vm, 'script' => "sublime-project"),
-        'ZP_dev' => array('projects' => $zp_dev, 'script' => "zp-sublime-project"),
+        'Lokale Development VM' => array('projects' => $dev_vm, 'script' => "sublime-project"),
+        'ZP dev' => array('projects' => $zp_dev, 'script' => "zp-sublime-project"),
+        'Drenthe dev' => array('projects' => $drenthe_dev, 'script' => "drenthe-sublime-project"),
+        'Edurep dev' => array('projects' => $edurep_dev, 'script' => "edurep-sublime-project"),
         'Sublime packages' => array('projects' => $sublime_packages, 'script' => "sublime", 'path' => "/Users/hendrik/Library/Application Support/Sublime Text 3/Packages"),
     );
 
