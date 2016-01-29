@@ -26,6 +26,7 @@ exec("HOME=/Users/hendrik sudo -u Hendrik ssh development \"ls development\" | g
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login zp development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $zp_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login drenthe development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $drenthe_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login edurep development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $edurep_dev, $exitcode);
+exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login obkapi development --print) \"ls -d */ | cut -f1 -d'/'\"  | grep -i \"$filter\" 2>&1", $obkapi_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik ls \"/Users/hendrik/Library/Application Support/Sublime Text 3/Packages\" | grep -i \"$filter\" 2>&1", $sublime_packages, $exitcode);
 
 $projectsDict = array(
@@ -34,6 +35,7 @@ $projectsDict = array(
         'ZP dev' => array('projects' => $zp_dev, 'script' => "zp-sublime-project"),
         'Drenthe dev' => array('projects' => $drenthe_dev, 'script' => "drenthe-sublime-project"),
         'Edurep dev' => array('projects' => $edurep_dev, 'script' => "edurep-sublime-project"),
+        'OBK-Api dev' => array('projects' => $obkapi_dev, 'script' => "obkapi-sublime-project"),
         'Sublime packages' => array('projects' => $sublime_packages, 'script' => "sublime", 'path' => "/Users/hendrik/Library/Application Support/Sublime Text 3/Packages"),
     );
 
