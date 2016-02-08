@@ -23,7 +23,7 @@ foreach ($config as $name => $project) {
 $PATH = (isset($_ENV["PATH"]) ? $_ENV["PATH"] : null);
 putenv("PATH=" .$PATH. ':/bin:/usr/bin:/usr/local/bin');
 $grep_dirs = "find . -maxdepth 1 -type d | sed 's,./,,' | grep -v '^\.' | grep -i '$filter'";
-exec("HOME=/Users/hendrik sudo -u Hendrik ssh development \"ls development\" | grep -i \"$filter\" 2>&1", $dev_vm, $exitcode);
+exec("HOME=/Users/hendrik sudo -u Hendrik ssh development -o ConnectTimeout=1 \"ls development\" | grep -i \"$filter\" 2>&1", $dev_vm, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login zp development --print) \"$grep_dirs\" 2>&1", $zp_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login drenthe development --print) \"$grep_dirs\" 2>&1", $drenthe_dev, $exitcode);
 exec("HOME=/Users/hendrik sudo -u Hendrik $(seecr-login edurep development --print) \"$grep_dirs\" 2>&1", $edurep_dev, $exitcode);
