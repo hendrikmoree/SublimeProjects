@@ -3,7 +3,7 @@
 #
 # All rights reserved.
 #
-# Copyright (C) 2015 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2015-2016 Seecr (Seek You Too B.V.) http://seecr.nl
 #
 ## end license ##
 
@@ -15,8 +15,22 @@ if (stristr($userAgent, "Mobile")) {
 ?>
 <html>
 <head>
+    <link rel="search" type="application/opensearchdescription+xml" href="opensearch.xml" title="Sublime Projects"/>
 
 <script type="text/javascript">
+function installSearchEngine() {
+ if (window.external && ("AddSearchProvider" in window.external)) {
+   // Firefox 2 and IE 7, OpenSearch
+   if (window.external.IsSearchProviderInstalled("opensearch.xml") == 0) {
+       window.external.AddSearchProvider("opensearch.xml");
+   }
+ } else {
+   // No search engine support (IE 6, Opera, etc).
+   alert("No search engine support");
+ }
+}
+installSearchEngine();
+
 function openUrl(url, onready) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);

@@ -3,13 +3,29 @@
 #
 # All rights reserved.
 #
-# Copyright (C) 2015 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2015-2016 Seecr (Seek You Too B.V.) http://seecr.nl
 #
 ## end license ##
 
-$project = (isset($_GET['project']) ? $_GET['project'] : null);
-$script = (isset($_GET['script']) ? $_GET['script'] : null);
-$path = (isset($_GET['path']) ? $_GET['path'] : null);
+$searchProject = (isset($_GET['searchProject']) ? $_GET['searchProject'] : null);
+if ($searchProject) {
+    $splitted = split(" - ", $searchProject, 2);
+    $project = $splitted[0];
+    $server = $splitted[1];
+
+    $f = fopen("projects.json", "r");
+    $projectsDict = json_decode(fread($f, filesize("projects.json")), true);
+    fclose($f);
+    $script = $projectsDict[$server]["script"];
+    $path = null;
+    if (in_array("path", $projectsDict[$server])) {
+        $path = $projectsDict[$server]["path"];
+    }
+} else {
+    $project = (isset($_GET['project']) ? $_GET['project'] : null);
+    $script = (isset($_GET['script']) ? $_GET['script'] : null);
+    $path = (isset($_GET['path']) ? $_GET['path'] : null);
+}
 
 $command = "HOME=/Users/hendrik sudo -u Hendrik ";
 if ($script != "sublime") {

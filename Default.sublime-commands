@@ -1,3 +1,4 @@
 [
-    { "caption": "SublimeProject: Checkout deps.d", "command": "checkout_project" }
+    { "caption": "SublimeProject: Checkout deps.d", "command": "checkout_project" },
+    { "caption": "SublimeProject: Update cache", "command": "update_projects_cache" }
 ]

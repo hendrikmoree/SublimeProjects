@@ -1,0 +1,6 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+    <ShortName>Sublime Projects</ShortName>
+    <Description>Sublime Projects</Description>
+    <Url method="get" template="http://localhost/projects/open.php?searchProject={searchTerms}" type="text/html"/>
+    <Url template="http://localhost/projects/projects.php?opensearch=true&amp;filter={searchTerms}" type="application/x-suggestions+json"/>
+</OpenSearchDescription>

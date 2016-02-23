@@ -2,24 +2,28 @@
 #
 # All rights reserved.
 #
-# Copyright (C) 2015 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2015-2016 Seecr (Seek You Too B.V.) http://seecr.nl
 #
 ## end license ##
 
 from urllib.request import urlopen
-from json import loads
+from json import loads, dump
 from sublime_plugin import WindowCommand
 from socket import socket, SHUT_WR
-from sublime import set_timeout, error_message
+from sublime import set_timeout, error_message, message_dialog
 from urllib.parse import urlencode
 from SublimeUtils.sublimeutils import executeCommand, projectRoot
 from os import makedirs
-from os.path import isdir, join
+from os.path import isdir, join, dirname, abspath
+from subprocess import call, PIPE, Popen, TimeoutExpired
+from threading import Thread
+
+mydir = dirname(abspath(__file__))
 
 class OpenProjectCommand(WindowCommand):
 
     def run(self):
-        response = loads(urlopen("http://localhost/projects/projects.php?json=true", timeout=5).read().decode("utf-8"))
+        response = loads(urlopen("http://localhost/projects/projects.php?json=true", timeout=1).read().decode("utf-8"))
         projects = []
         for server, p in response.items():
             for project in p['projects']:
@@ -66,3 +70,39 @@ class CheckoutProjectCommand(WindowCommand):
         depsDdir = join(projectRoot(self.view), "deps.d")
         isdir(depsDdir) or makedirs(depsDdir)
         executeCommand(view=self.view, args=["seecr-git-clone {}".format(projects[i])], projectCwd="deps.d")
+
+class UpdateProjectsCacheCommand(WindowCommand):
+    def run(self):
+        t = Thread(target=self._do)
+        t.start()
+
+    def _do(self):
+        for i in range(2):
+            p = Popen("./list_projects.sh", stdout=PIPE, stderr=PIPE, cwd=mydir)
+            outs, errs = None, None
+            for n in range(30):
+                print ('Waiting .. %s' % n)
+                try:
+                    outs, errs = p.communicate(timeout=1)
+                    break
+                except (TimeoutExpired):
+                    pass
+                except (ValueError):
+                    break
+            if outs and n < 29:
+                break
+        if i == 1 and n == 29:
+            message_dialog("Cache update failed")
+            return
+
+        result = [r.strip(',').split(',') for r in str(outs, 'utf-8').split('\n')]
+        with open(join(mydir, "projects.json"), 'w') as f:
+            dump({
+                'Lokale Development VM': dict(projects=result[0], script="sublime-project"),
+                'ZP dev': dict(projects=result[1], script="zp-sublime-project"),
+                'Drenthe dev': dict(projects=result[2], script="drenthe-sublime-project"),
+                'Edurep dev': dict(projects=result[3], script="edurep-sublime-project"),
+                'OBK-Api dev': dict(projects=result[4], script="obkapi-sublime-project"),
+                'Sublime packages': dict(projects=result[5], script="sublime", path="/Users/hendrik/Library/Application Support/Sublime Text 3/Packages"),
+            }, f, indent=4)
+        message_dialog("Cache updated")
