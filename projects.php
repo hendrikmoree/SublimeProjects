@@ -66,7 +66,7 @@ if ($json) {
         echo '"projects" : [';
         $started2 = FALSE;
         foreach ($projects['projects'] as $project) {
-            if ($filter and stripos($project, $filter) == FALSE) {
+            if ($filter and stripos($project, $filter) === FALSE) {
                 continue;
             }
             if ($started2) {
@@ -84,7 +84,7 @@ if ($json) {
 foreach ($projectsDict as $name => $projects) {
     $started = FALSE;
     foreach ($projects['projects'] as $project) {
-        if ($filter and stripos($project, $filter) == FALSE) {
+        if ($filter and stripos($project, $filter) === FALSE) {
             continue;
         }
         if (!$started) { ?>
