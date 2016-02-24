@@ -10,16 +10,6 @@ $filter = (isset($_GET['filter']) ? $_GET['filter'] : null);
 $json = (isset($_GET['json']) ? $_GET['json'] : null);
 $opensearch = (isset($_GET['opensearch']) ? $_GET['opensearch'] : null);
 $forceCache = (isset($_GET['forceCache']) ? $_GET['forceCache'] : null);
-$f = fopen("config.json", "r");
-$config = json_decode(fread($f, filesize("config.json")));
-fclose($f);
-
-$projects = array();
-foreach ($config as $name => $project) {
-    if (!$filter || ($filter && stripos($name, $filter) !== FALSE)) {
-        $projects[] = $name;
-    }
-}
 
 $PROJECTS_FILE = "projects.json";
 $f = fopen($PROJECTS_FILE, "r");

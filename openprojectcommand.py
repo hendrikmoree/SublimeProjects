@@ -7,7 +7,7 @@
 ## end license ##
 
 from urllib.request import urlopen
-from json import loads, dump
+from json import loads, dump, load
 from sublime_plugin import WindowCommand
 from socket import socket, SHUT_WR
 from sublime import set_timeout, error_message, message_dialog
@@ -95,9 +95,12 @@ class UpdateProjectsCacheCommand(WindowCommand):
             message_dialog("Cache update failed")
             return
 
+        devProjects = list(load(open(join(mydir, "config.json"))).keys())
+
         result = [r.strip(',').split(',') for r in str(outs, 'utf-8').split('\n')]
         with open(join(mydir, "projects.json"), 'w') as f:
             dump({
+                'Dev servers': dict(projects=devProjects, script=""),
                 'Lokale Development VM': dict(projects=result[0], script="sublime-project"),
                 'ZP dev': dict(projects=result[1], script="zp-sublime-project"),
                 'Drenthe dev': dict(projects=result[2], script="drenthe-sublime-project"),
