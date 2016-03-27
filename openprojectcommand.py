@@ -73,6 +73,7 @@ class CheckoutProjectCommand(WindowCommand):
 
 class UpdateProjectsCacheCommand(WindowCommand):
     def run(self):
+        self.view = self.window.active_view()
         t = Thread(target=self._do)
         t.start()
 
@@ -80,8 +81,8 @@ class UpdateProjectsCacheCommand(WindowCommand):
         for i in range(2):
             p = Popen("./list_projects.sh", stdout=PIPE, stderr=PIPE, cwd=mydir)
             outs, errs = None, None
-            for n in range(30):
-                print ('Waiting .. %s' % n)
+            for n in range(15):
+                self.view.set_status('UpdateProjectsCacheCommand', 'Waiting .. %s' % n)
                 try:
                     outs, errs = p.communicate(timeout=1)
                     break
@@ -91,6 +92,7 @@ class UpdateProjectsCacheCommand(WindowCommand):
                     break
             if outs and n < 29:
                 break
+        self.view.erase_status('UpdateProjectsCacheCommand')
         if i == 1 and n == 29:
             message_dialog("Cache update failed")
             return
